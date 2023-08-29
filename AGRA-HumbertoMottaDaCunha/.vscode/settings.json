@@ -1,0 +1,13 @@
+{
+    "files.associations": {
+        "iosfwd": "cpp",
+        "iostream": "cpp",
+        "ostream": "cpp",
+        "new": "cpp",
+        "fstream": "cpp",
+        "__config": "cpp",
+        "__nullptr": "cpp",
+        "vector": "cpp"
+    },
+    "C_Cpp.default.compilerPath": "C:\\MinGW\\bin\\g++.exe"
+}
