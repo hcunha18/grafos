@@ -257,19 +257,19 @@ using namespace std;
 
   void Grafo::ordenacaoTopologica(){
     Grafo *grafoT = this->grafoTransposto();
-    int *cor = new int[this->_numVertices()];
-    int *antecessor = new int[this->_numVertices()];
+    int *cor = new int[grafoT->_numVertices()];
+    int *antecessor = new int[grafoT->_numVertices()];
     vector < int > lista;
     
-    for (int i=0; i<this->numVertices; i++){
+    for (int i=0; i<grafoT->numVertices; i++){
       cor[i] = 0;
       antecessor[i] = -1;
     }
-    for (int u = 0; u<this->numVertices; u++){
+    for (int u = 0; u<grafoT->numVertices; u++){
       if (cor[u] == 0)
-        this->topologica(u, cor, antecessor, lista);
+        grafoT->topologica(u, cor, antecessor, lista);
     }
-    for (int i=0; i<this->numVertices;i++){
+    for (int i=0; i<grafoT->numVertices;i++){
       cout << lista[i] << endl;
     }
 
@@ -277,7 +277,6 @@ using namespace std;
 
   void Grafo::topologica(int u, int *cor, int *antecessor, vector<int> &L){
     cor[u] = 1;
-    cout << "cinza: "<< u << endl;
     if (!this->listaAdjVazia (u)) {
       Aresta *adj = this->primeiroListaAdj (u);
       while (adj != NULL) {

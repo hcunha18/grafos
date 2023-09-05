@@ -4,7 +4,7 @@ using namespace std;
 
 int main (int argc, char **argv) 
 {
-    ifstream in ("input.txt");
+    ifstream in ("exemplo1.txt");
     Grafo *grafo = new Grafo (in);
     // grafo->imprime ();  
 
