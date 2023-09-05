@@ -1,10 +1,10 @@
-#include "matrizadj/Grafo.h" 
+#include "listaadj/Grafo.h" 
 #include <fstream>
 using namespace std;
 
 int main (int argc, char **argv) 
 {
-    ifstream in ("completo.txt");
+    ifstream in ("input.txt");
     Grafo *grafo = new Grafo (in);
     // grafo->imprime ();  
 
@@ -56,11 +56,9 @@ int main (int argc, char **argv)
     // implementação da matriz
     // a implementar
 
-    
-
     // Ex: 6 Encontrando Grau do vertice :: Matriz
     // para testar o grafo transoforamar em não direcionado
-    Grafo *grafo_nao_direcionado = grafo->grafoNaoDirecionado();
+    // Grafo *grafo_nao_direcionado = grafo->grafoNaoDirecionado();
     // cout << grafo_nao_direcionado->grauVertice(0);
 
     // Ex: 7 Verificação se o grafo é completo
@@ -80,5 +78,16 @@ int main (int argc, char **argv)
     //     cout << "não é direcionado";
     // else cout << "direcionado";
 
-    cout << grafo_nao_direcionado->direcionado();
+    // cout << grafo_nao_direcionado->direcionado();
+    // grafo->buscaProfundidade();
+
+    // verificação se um grafo é ciclico 
+    // if (grafo->grafoAciclico() == 1)
+    //     cout << "Grafo é Ciclico" << endl;
+    // if (grafo->grafoAciclico() == 0)
+    //     cout << "Grafo é Aciclico" << endl;
+    
+    // verificação topologica
+    grafo->ordenacaoTopologica();
+
 }

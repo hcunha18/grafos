@@ -67,7 +67,14 @@ using namespace std;
 	  int _numVertices () const;
 	  Grafo *grafoTransposto ();
     Grafo *grafoNaoOrientado ();
-    ~Grafo ();	  
+    int grauVertice();
+    void buscaProfundidade();
+    void visitaDfs(int u, int *cor, int *antecessor);
+    bool grafoAciclico();
+    bool aciclico(int u, int *cor, int *antecessor);
+    void ordenacaoTopologica();
+    void topologica(int u, int *cor, int *antecessor, vector<int> &L);
+    ~Grafo (); 
 	};
 
   Grafo::Grafo( istream &in )
@@ -175,6 +182,117 @@ using namespace std;
       }
     return grafoT;
 
+  }
+
+  void Grafo::buscaProfundidade(){
+    int *cor = new int[this->_numVertices()];
+    int *antecessor = new int[this->_numVertices()];
+    for (int i=0; i<this->numVertices; i++){
+      cor[i] = 0;
+      antecessor[i] = -1;
+    }
+    for (int u = 0; u<this->numVertices; u++){
+      if (cor[u] == 0)
+        this->visitaDfs(u, cor, antecessor);
+    }
+  }
+
+
+  void Grafo::visitaDfs(int u, int *cor, int *antecessor){
+    cor[u] = 1;
+    cout << "cinza: "<< u << endl;
+    if (!this->listaAdjVazia (u)) {
+      Aresta *adj = this->primeiroListaAdj (u);
+      while (adj != NULL) {
+        int v = adj->_v2();
+        if(cor[v] == 0){
+          antecessor[v] = u;
+          this->visitaDfs(v, cor, antecessor);
+        } 
+        delete adj;
+        adj = this->proxAdj(u);
+        }
+    }
+    cor[u] = 2;
+    cout << "preto: " << u << endl;
+  }
+
+  bool Grafo::grafoAciclico(){
+    int *cor = new int[this->_numVertices()];
+    int *antecessor = new int[this->_numVertices()];
+    for(int i=0; i<this->numVertices; i++){
+      cor[i] = 0;
+      antecessor[i] = -1;
+    }
+    bool verification = 0;
+    for (int u=0; u<this->numVertices; u++){
+      if (cor[u] == 0)
+        verification = this->aciclico(u, cor, antecessor);
+      if (verification == 1)
+        return verification;
+    }
+    return verification;
+  }
+
+  bool Grafo::aciclico(int u, int *cor, int *antecessor){
+    cor[u] = 1;
+    if (!this->listaAdjVazia (u)) {
+      Aresta *adj = this->primeiroListaAdj (u);
+      while (adj != NULL) {
+        int v = adj->_v2();
+        if(cor[v] == 1){
+          return 1;
+        }
+        if(cor[v] == 0){
+          antecessor[v] = u;
+          this->aciclico(v, cor, antecessor);
+        } 
+        delete adj;
+        adj = this->proxAdj(u);
+        }
+    }
+    cor[u] = 2;
+    return 0;
+  }
+
+  void Grafo::ordenacaoTopologica(){
+    Grafo *grafoT = this->grafoTransposto();
+    int *cor = new int[this->_numVertices()];
+    int *antecessor = new int[this->_numVertices()];
+    vector < int > lista;
+    
+    for (int i=0; i<this->numVertices; i++){
+      cor[i] = 0;
+      antecessor[i] = -1;
+    }
+    for (int u = 0; u<this->numVertices; u++){
+      if (cor[u] == 0)
+        this->topologica(u, cor, antecessor, lista);
+    }
+    for (int i=0; i<this->numVertices;i++){
+      cout << lista[i] << endl;
+    }
+
+  }
+
+  void Grafo::topologica(int u, int *cor, int *antecessor, vector<int> &L){
+    cor[u] = 1;
+    cout << "cinza: "<< u << endl;
+    if (!this->listaAdjVazia (u)) {
+      Aresta *adj = this->primeiroListaAdj (u);
+      while (adj != NULL) {
+        int v = adj->_v2();
+        if(cor[v] == 0){
+          antecessor[v] = u;
+          this->topologica(v, cor, antecessor, L);
+        } 
+        delete adj;
+        adj = this->proxAdj(u);
+        }
+    }
+    cor[u] = 2;
+    L.push_back(u);
+    
   }
 
   Grafo::~Grafo () {
