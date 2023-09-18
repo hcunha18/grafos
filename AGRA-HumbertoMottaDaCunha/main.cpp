@@ -4,7 +4,7 @@ using namespace std;
 
 int main (int argc, char **argv) 
 {
-    ifstream in ("exemplo1.txt");
+    ifstream in ("input.txt");
     Grafo *grafo = new Grafo (in);
     // grafo->imprime ();  
 
@@ -87,7 +87,19 @@ int main (int argc, char **argv)
     // if (grafo->grafoAciclico() == 0)
     //     cout << "Grafo é Aciclico" << endl;
     
+    // cout << endl;
+    
     // verificação topologica
-    grafo->ordenacaoTopologica();
+    // cout << "Ordenação Topologica: "<< endl;
+    // grafo->ordenacaoTopologica();
 
+    // cout << endl;
+
+    // obtendo o número de componentes de um grafo
+    // int k = grafo->nComponentes();
+    // cout << "Número de Componentes: " << k << endl;
+
+    // grafo->buscaLargura();
+
+    grafo->caminhoMaisCurto(2, 0);
 }

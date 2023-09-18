@@ -74,6 +74,11 @@ using namespace std;
     bool aciclico(int u, int *cor, int *antecessor);
     void ordenacaoTopologica();
     void topologica(int u, int *cor, int *antecessor, vector<int> &L);
+    int nComponentes();
+    void buscaLargura();
+    void visitaBfs(int u, int *cor, int *antecessor, int *dist);
+    void caminhoMaisCurto(int u, int v);
+    void imprimeCaminhoMaisCurto(int u, int v, int *antecessor);
     ~Grafo (); 
 	};
 
@@ -200,7 +205,7 @@ using namespace std;
 
   void Grafo::visitaDfs(int u, int *cor, int *antecessor){
     cor[u] = 1;
-    cout << "cinza: "<< u << endl;
+    // cout << "cinza: "<< u << endl;
     if (!this->listaAdjVazia (u)) {
       Aresta *adj = this->primeiroListaAdj (u);
       while (adj != NULL) {
@@ -214,7 +219,7 @@ using namespace std;
         }
     }
     cor[u] = 2;
-    cout << "preto: " << u << endl;
+    // cout << "preto: " << u << endl;
   }
 
   bool Grafo::grafoAciclico(){
@@ -292,6 +297,92 @@ using namespace std;
     cor[u] = 2;
     L.push_back(u);
     
+  }
+
+  int Grafo::nComponentes(){
+    int *cor = new int[this->_numVertices()];
+    int *antecessor = new int[this->_numVertices()];
+    for (int i=0; i<this->numVertices; i++){
+      cor[i] = 0;
+      antecessor[i] = -1;
+    }
+    int k=0;
+    for (int u = 0; u<this->numVertices; u++){
+      if (cor[u] == 0){
+        k+=1;
+        this->visitaDfs(u, cor, antecessor);
+      }
+    }
+    return k;
+  }
+
+  void Grafo::buscaLargura(){
+    int *cor = new int[this->_numVertices()];
+    int *antecessor = new int[this->_numVertices()];
+    int *dist = new int[this->_numVertices()];
+    for(int i = 0; i<this->numVertices; i++){
+      cor[i] = 0;
+      antecessor[i] = -1;
+      dist[i] = 999;
+    }
+    for(int i=0; i<this->numVertices; i++){
+      if(cor[i] == 0)
+        visitaBfs(i, cor, antecessor, dist);
+    }
+  }
+
+  void Grafo::visitaBfs(int u, int *cor, int *antecessor, int *dist){
+    queue <int> fila;
+    dist[u] = 0;
+    cor[u] = 1;
+    fila.push(u);
+    while (!fila.empty())
+    {
+      u = fila.front();
+      fila.pop();
+      Aresta *adj = this->primeiroListaAdj (u);
+      cout << "visitou" << u << endl;
+      while (adj != NULL) {
+        int v = adj->_v2();
+        if(cor[v] == 0){
+          antecessor[v] = u;
+          cor[v] = 1;
+          dist[v] = dist[u] + 1;
+          fila.push(v);
+        } 
+        delete adj;
+        adj = this->proxAdj(u);
+        }
+    cor[u] = 2;
+    }
+    
+  }
+
+  void Grafo::caminhoMaisCurto(int u, int v){
+    int *cor = new int[this->_numVertices()];
+    int *antecessor = new int[this->_numVertices()];
+    int *dist = new int[this->_numVertices()];
+    for(int i = 0; i<this->numVertices; i++){
+      cor[i] = 0;
+      antecessor[i] = -1;
+      dist[i] = 999;
+    }
+  
+    visitaBfs(u, cor, antecessor, dist);
+    imprimeCaminhoMaisCurto(u, v, antecessor);
+  }
+  
+  void Grafo::imprimeCaminhoMaisCurto(int u, int v, int *antecessor){
+      if(u == v){
+        cout << v << endl;
+      }
+      else if(antecessor[v] == -1){
+        cout << "não existe caminho de u para v" << v<<endl;
+      }
+      else {
+        imprimeCaminhoMaisCurto(u, antecessor[v], antecessor);
+        cout << v << endl;
+      }
   }
 
   Grafo::~Grafo () {
