@@ -6,6 +6,8 @@ int main (int argc, char **argv)
 {
     ifstream in ("input.txt");
     Grafo *grafo = new Grafo (in);
+    grafo->kruskal();
+
     // grafo->imprime ();  
 
     //Ex1: criar e imprimir grafo transposto.
@@ -100,6 +102,6 @@ int main (int argc, char **argv)
     // cout << "Número de Componentes: " << k << endl;
 
     // grafo->buscaLargura();
-
-    grafo->caminhoMaisCurto(2, 0);
+    // grafo->caminhoMaisCurto(1, 0);
+    
 }

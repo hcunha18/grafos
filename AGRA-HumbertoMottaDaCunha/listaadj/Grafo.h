@@ -21,6 +21,9 @@ using namespace std;
 	    int _peso () { return this->peso; }
 	    int _v1 () { return this->v1; }
 	    int _v2 () { return this->v2; }
+      bool operator<(const Aresta &p) const{
+        return peso<p.peso;
+      }
 	    ~Aresta(){}
 	  };
 	private:	
@@ -79,6 +82,9 @@ using namespace std;
     void visitaBfs(int u, int *cor, int *antecessor, int *dist);
     void caminhoMaisCurto(int u, int v);
     void imprimeCaminhoMaisCurto(int u, int v, int *antecessor);
+    void kruskal();
+    int encontrarConjunto(int* conjunto, int vertice);
+    void unirConjunto(int *conjunto, int x, int y);
     ~Grafo (); 
 	};
 
@@ -341,7 +347,7 @@ using namespace std;
       u = fila.front();
       fila.pop();
       Aresta *adj = this->primeiroListaAdj (u);
-      cout << "visitou" << u << endl;
+      // cout << "visitou" << u << endl;
       while (adj != NULL) {
         int v = adj->_v2();
         if(cor[v] == 0){
@@ -383,6 +389,54 @@ using namespace std;
         imprimeCaminhoMaisCurto(u, antecessor[v], antecessor);
         cout << v << endl;
       }
+  }
+
+  
+
+  int Grafo::encontrarConjunto(int *conjunto, int vertice){
+    if(conjunto[vertice] == -1)
+      return vertice;
+    return encontrarConjunto(conjunto, conjunto[vertice]);
+  }
+
+  void Grafo::unirConjunto(int *conjunto, int x, int y){
+    int conjuntoX = encontrarConjunto(conjunto, x);
+    int conjuntoY = encontrarConjunto(conjunto, y);
+    conjunto[conjuntoX] = conjuntoY;
+  }
+
+  void Grafo::kruskal(){
+    vector<Aresta> S;
+    int *conjunto = new int[this->_numVertices()];
+    memset(conjunto, -1, sizeof(int)*this->_numVertices());
+
+    vector<Aresta> A;
+
+    // adicionar aresta
+    for (int i = 0; i < numVertices; i++){
+      if (!this->listaAdjVazia(i)) {
+        Aresta *adj = primeiroListaAdj(i);
+        while (adj != NULL) {
+          A.push_back(*adj);
+          delete adj;
+          adj = this->proxAdj(i);
+        }
+      }
+    }
+
+    // ordenação pelo peso
+    sort(A.begin(), A.end());
+
+    // encontrar conjunto
+    for(int i=0; i<A.size(); i++){
+      if (encontrarConjunto(conjunto, A[i]._v1()) != encontrarConjunto(conjunto, A[i]._v2())){
+        S.push_back(A[i]);
+        unirConjunto(conjunto, A[i]._v1(), A[i]._v2());
+      }
+    }
+    for (int i=0; i<S.size(); i++){
+      cout << S[i]._v1() << " " << S[i]._v2() << " " << S[i]._peso() << endl;
+    } 
   }
 
   Grafo::~Grafo () {
