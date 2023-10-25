@@ -85,6 +85,7 @@ using namespace std;
     void kruskal();
     int encontrarConjunto(int* conjunto, int vertice);
     void unirConjunto(int *conjunto, int x, int y);
+    void prim(int raiz);
     ~Grafo (); 
 	};
 
@@ -391,8 +392,6 @@ using namespace std;
       }
   }
 
-  
-
   int Grafo::encontrarConjunto(int *conjunto, int vertice){
     if(conjunto[vertice] == -1)
       return vertice;
@@ -438,6 +437,49 @@ using namespace std;
       cout << S[i]._v1() << " " << S[i]._v2() << " " << S[i]._peso() << endl;
     } 
   }
+
+  void Grafo::prim(int raiz){
+    int n = this->_numVertices();
+    int *antecessor = new int[n];
+    double *peso = new double[n];
+    bool *itensHeap = new bool[n];
+    int *vs = new int[n];
+
+    for (int i=0; i<n; i++){
+      peso[i] = 999999;
+      antecessor[i] = -1;
+      itensHeap[i] = true;
+      vs[i+1] = i;
+    }
+    peso[raiz] = 0;
+    FPHeapMinIndireto Q(peso, vs, n);
+    Q.constroi();
+    while(!Q.vazio()){
+      int u = Q.retiraMin();
+      itensHeap[u] = false;
+
+        if (!this->listaAdjVazia(u)) {
+          Aresta *adj = primeiroListaAdj(u);
+        while(adj != NULL){
+          if(itensHeap[adj->_v2()] && adj->_peso() < peso[adj->_v2()]){
+            antecessor[adj->_v2()] = u;
+            Q.diminuiChave(adj->_v2(), adj->_peso());
+          }
+        delete adj;
+        adj = this->proxAdj(u);
+        }
+        
+        }
+        
+      
+    }
+    for (int i=0; i<n; i++){
+          cout << i << " " << antecessor[i] << " " << peso[i]<<endl;
+        }
+    }
+
+
+  
 
   Grafo::~Grafo () {
     delete [] this->adj;

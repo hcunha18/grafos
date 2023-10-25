@@ -6,7 +6,8 @@ int main (int argc, char **argv)
 {
     ifstream in ("input.txt");
     Grafo *grafo = new Grafo (in);
-    grafo->kruskal();
+    // grafo->kruskal();
+    grafo->prim(0);
 
     // grafo->imprime ();  
 
