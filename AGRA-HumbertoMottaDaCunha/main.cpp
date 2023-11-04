@@ -6,13 +6,15 @@ int main (int argc, char **argv)
 {
     ifstream in ("input.txt");
     Grafo *grafo = new Grafo (in);
-    // grafo->kruskal();
-    // grafo->prim(0);
-    // grafo->dijkstra(0);
-    grafo->menorCaminho(0, 2);
+    cout << "Algoritmo de dijkstra" << endl;
+    grafo->dijkstra(0);
+    cout << "Menor caminho" << endl;
+    grafo->menorCaminho(0, 4);
+
 
     // grafo->imprime ();  
-
+    // grafo->kruskal();
+    // grafo->prim(0);
     //Ex1: criar e imprimir grafo transposto.
     // Grafo *grafo_transposto = new Grafo(7);
     // grafo_transposto = grafo -> grafoTransposto();
