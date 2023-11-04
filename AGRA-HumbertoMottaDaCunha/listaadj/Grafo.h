@@ -86,6 +86,8 @@ using namespace std;
     int encontrarConjunto(int* conjunto, int vertice);
     void unirConjunto(int *conjunto, int x, int y);
     void prim(int raiz);
+    void dijkstra(int raiz);
+    void menorCaminho(int raiz, int feature);
     ~Grafo (); 
 	};
 
@@ -444,7 +446,6 @@ using namespace std;
     double *peso = new double[n];
     bool *itensHeap = new bool[n];
     int *vs = new int[n];
-
     for (int i=0; i<n; i++){
       peso[i] = 999999;
       antecessor[i] = -1;
@@ -457,7 +458,6 @@ using namespace std;
     while(!Q.vazio()){
       int u = Q.retiraMin();
       itensHeap[u] = false;
-
         if (!this->listaAdjVazia(u)) {
           Aresta *adj = primeiroListaAdj(u);
         while(adj != NULL){
@@ -468,16 +468,86 @@ using namespace std;
         delete adj;
         adj = this->proxAdj(u);
         }
-        
         }
-        
-      
     }
     for (int i=0; i<n; i++){
           cout << i << " " << antecessor[i] << " " << peso[i]<<endl;
         }
     }
 
+  void Grafo::dijkstra(int raiz){
+    int *antecessor = new int[this->_numVertices()];
+    double *peso = new double[this->_numVertices()];
+    int *vs = new int[this->_numVertices()];
+    for (int i=0; i<this->_numVertices(); i++){
+      peso[i] = 9999999;
+      antecessor[i] = -1;
+      vs[i+1] = i;
+    }
+    peso[raiz] = 0;
+    FPHeapMinIndireto Q(peso, vs, this->_numVertices());
+    Q.constroi();
+    while (!Q.vazio())
+    {
+      int u = Q.retiraMin();
+      if (!this->listaAdjVazia(u)) {
+        Aresta *adj = primeiroListaAdj(u);
+        while(adj != NULL){
+          if(peso[adj->_v2()] > peso[u] + adj->_peso()){
+            antecessor[adj->_v2()] = u;
+            Q.diminuiChave(adj->_v2(), adj->_peso());
+          }
+        delete adj;
+        adj = this->proxAdj(u);
+        }
+        }
+      
+    }
+    for (int i=0; i<this->numVertices; i++){
+          cout << i << " " << antecessor[i] << " " << peso[i]<<endl;
+        }
+    
+
+  }
+
+  void Grafo::menorCaminho(int raiz, int feature){
+
+    int *antecessor = new int[this->_numVertices()];
+    double *peso = new double[this->_numVertices()];
+    int *vs = new int[this->_numVertices()];
+    for (int i=0; i<this->_numVertices(); i++){
+      peso[i] = 9999999;
+      antecessor[i] = -1;
+      vs[i+1] = i;
+    }
+    peso[raiz] = 0;
+    FPHeapMinIndireto Q(peso, vs, this->_numVertices());
+    Q.constroi();
+    while (!Q.vazio())
+    {
+      int u = Q.retiraMin();
+      if (!this->listaAdjVazia(u)) {
+        Aresta *adj = primeiroListaAdj(u);
+        while(adj != NULL){
+          if(peso[adj->_v2()] > peso[u] + adj->_peso()){
+            antecessor[adj->_v2()] = u;
+            Q.diminuiChave(adj->_v2(), adj->_peso());
+          }
+        delete adj;
+        adj = this->proxAdj(u);
+        }
+        }
+      
+    }
+
+  int j = feature;
+  cout << j ;
+  while(j != raiz){
+    j = antecessor[j];
+    cout <<"<-"<< j ;
+  }
+
+  }
 
   
 
