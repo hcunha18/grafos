@@ -490,16 +490,15 @@ using namespace std;
     while (!Q.vazio())
     {
       int u = Q.retiraMin();
-      if (!this->listaAdjVazia(u)) {
-        Aresta *adj = primeiroListaAdj(u);
+      Aresta *adj = primeiroListaAdj(u);
         while(adj != NULL){
           if(peso[adj->_v2()] > peso[u] + adj->_peso()){
+            peso[adj->_v2()] = peso[u] + adj->_peso();
             antecessor[adj->_v2()] = u;
-            Q.diminuiChave(adj->_v2(), adj->_peso());
+            Q.diminuiChave(adj->_v2(), peso[adj->_v2()]);
           }
-        delete adj;
+        // delete adj;
         adj = this->proxAdj(u);
-        }
         }
       
     }
@@ -511,7 +510,6 @@ using namespace std;
   }
 
   void Grafo::menorCaminho(int raiz, int feature){
-
     int *antecessor = new int[this->_numVertices()];
     double *peso = new double[this->_numVertices()];
     int *vs = new int[this->_numVertices()];
@@ -526,25 +524,30 @@ using namespace std;
     while (!Q.vazio())
     {
       int u = Q.retiraMin();
-      if (!this->listaAdjVazia(u)) {
-        Aresta *adj = primeiroListaAdj(u);
+      Aresta *adj = primeiroListaAdj(u);
         while(adj != NULL){
           if(peso[adj->_v2()] > peso[u] + adj->_peso()){
+            peso[adj->_v2()] = peso[u] + adj->_peso();
             antecessor[adj->_v2()] = u;
-            Q.diminuiChave(adj->_v2(), adj->_peso());
+            Q.diminuiChave(adj->_v2(), peso[adj->_v2()]);
           }
-        delete adj;
+        // delete adj;
         adj = this->proxAdj(u);
-        }
         }
       
     }
-
+    
   int j = feature;
-  cout << j ;
+  vector < int > lista;
+  lista.push_back(j);
   while(j != raiz){
     j = antecessor[j];
-    cout <<"<-"<< j ;
+    lista.push_back(j);
+  }
+
+  for(int i=lista.size()-1; i >=0; i--){
+    cout << lista[i] << endl;
+    
   }
 
   }
