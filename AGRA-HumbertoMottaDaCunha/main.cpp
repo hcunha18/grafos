@@ -1,4 +1,4 @@
-#include "listaadj/Grafo.h" 
+#include "matrizadj/Grafo.h" 
 #include <fstream>
 using namespace std;
 
@@ -6,11 +6,15 @@ int main (int argc, char **argv)
 {
     ifstream in ("input.txt");
     Grafo *grafo = new Grafo (in);
-    cout << "Algoritmo de dijkstra" << endl;
-    grafo->dijkstra(0);
-    cout << "Menor caminho" << endl;
-    grafo->menorCaminho(0, 4);
 
+    // grafo->imprime();
+    grafo->floydWarshall(0, 5);
+
+
+    // cout << "Algoritmo de dijkstra" << endl;
+    // grafo->dijkstra(0);
+    // cout << "Menor caminho" << endl;
+    // grafo->menorCaminho(0, 4);
 
     // grafo->imprime ();  
     // grafo->kruskal();

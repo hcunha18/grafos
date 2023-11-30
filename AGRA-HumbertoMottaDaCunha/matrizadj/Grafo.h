@@ -47,6 +47,8 @@ using namespace std;
     bool euleriano();
     bool subeuleriano();
     bool direcionado();
+    void floydWarshall(int u, int v);
+    void caminhoMaisCurto(int u, int v, int *antecessor);
     ~Grafo ();	  
 	};
 
@@ -247,6 +249,88 @@ using namespace std;
       }
     }
     return 0; 
+  }
+
+  void Grafo::floydWarshall(int u, int v){
+    int **d, **antecessor;
+    
+    d = new int*[this->_numVertices()];
+    antecessor = new int*[this->_numVertices()];
+
+    for(int i=0; i<this->_numVertices(); i++){
+      d[i] = new int[this->_numVertices() + 1];
+      antecessor[i] = new int[this->_numVertices() + 1];
+    }
+
+    for(int i=0; i<this->_numVertices(); i++){
+      for(int j=0; j<this->_numVertices(); j++){
+        if(this->mat[i][j] != NULL){
+          d[i][j] = this->mat[i][j];
+          antecessor[i][j] = i;
+        }
+        else{
+          d[i][j] = 99999;
+          antecessor[i][j] = -1;
+        }
+      }
+    }
+
+    for(int k=0; k<this->_numVertices(); k++){
+      for(int i=0; i<this->_numVertices(); i++){
+        for(int j=0; j<this->_numVertices(); j++){
+          if(d[i][k] + d[k][j] < d[i][j]){
+            d[i][j] = d[i][k] + d[k][j];
+            antecessor[i][j] = antecessor[k][j];
+          }
+        }
+      }
+    }
+  
+
+
+
+    cout << "   ";
+    for (int i = 0; i < this->_numVertices(); i++){
+      cout << i << "   "; 
+    }
+    cout << endl;
+    for (int i = 0; i < this->_numVertices(); i++){ 
+      cout << i <<  "  ";
+      for (int j = 0; j < this->_numVertices(); j++)
+        cout << antecessor[i][j] << "   ";
+      cout << endl;
+    }
+
+    cout <<  endl << endl;
+
+    cout << "   ";
+    for (int i = 0; i < this->_numVertices(); i++){
+      cout << i << "   "; 
+    }
+    cout << endl;
+    for (int i = 0; i < this->_numVertices(); i++){ 
+      cout << i <<  "  ";
+      for (int j = 0; j < this->_numVertices(); j++)
+        cout << d[i][j] << "   ";
+      cout << endl;
+    }
+
+    caminhoMaisCurto(u, v, antecessor[u]);
+  }
+
+  void Grafo::caminhoMaisCurto(int u, int v, int *antecessor){
+    cout << 'Caminho mais Curto' << endl;
+    int j = v;
+    vector < int > lista;
+    lista.push_back(j);
+    while (j != 0)
+    {
+      j = antecessor[j];
+      lista.push_back(j);
+    }
+    for(int i=lista.size()-1; i >=0; i--){
+    cout << lista[i] << endl;
+    }
   }
 
   Grafo::~Grafo()
